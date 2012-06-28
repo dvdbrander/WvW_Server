@@ -58,11 +58,11 @@ public class Client extends Thread {
 							int messageId = Integer.parseInt(stringArray[0]);
 							if (Integer.parseInt(stringArray[1]) == 1) {
 								switch (messageId) {
-									case 1:
-										out.println("1|" + System.currentTimeMillis());
+									case 1: // pinged
+										out.println(string);
 										out.flush();
 										lastPinged = System.currentTimeMillis();
-										lastPing = System.currentTimeMillis() - Long.parseLong(stringArray[1]);
+										lastPing = System.currentTimeMillis() - Long.parseLong(stringArray[2]);
 									break;
 
 									case 2:// New player joined, reply with ID
@@ -99,11 +99,11 @@ public class Client extends Thread {
 				e.printStackTrace();
 			}
 			fps.updateFPS();
-			try {
-				Thread.sleep(fps.getSleepmillis());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(fps.getSleepmillis());
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 		}
 	}
 }
