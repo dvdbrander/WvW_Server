@@ -5,6 +5,13 @@ public class FPS {
 	private int frames = 0;
 	private long fps = 60;
 	private int sleepmillis = 17;
+	private boolean show = false;
+	
+	public FPS() {
+	}
+	public FPS(Boolean show){
+		this.show = show;
+	}
 	
 	void updateFPS(){
 		if (System.currentTimeMillis() - oldMillis >= 1000) {
@@ -17,6 +24,7 @@ public class FPS {
 			} else if (getFps() > 65) {
 				setSleepmillis(getSleepmillis() + 1);
 			}
+			if (show)
 			System.out.println(getFps());
 		}
 		frames++;

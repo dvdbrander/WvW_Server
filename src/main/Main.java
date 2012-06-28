@@ -1,46 +1,29 @@
 package main;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
-
-	
 
 	public static void main(String[] args) {
 		new Main();
 	}
 
 	private boolean run = true;
-	private FPS fps = new FPS();
 	private ClientAccepter clientaccepter = new ClientAccepter(this);
-	private ArrayList<Client> clients = new ArrayList<Client>();
-	
-	
-	public Main(){
+	ConcurrentHashMap<Client, Integer> clients = new ConcurrentHashMap<Client, Integer>();
+
+	public Main() {
 		init();
-		while (isRunning()){
-			step();
-		}
-		shutdown();
-	}
-		
-	private void shutdown() {
-		System.out.println("Stopping server");
 	}
 
-	private void step() {
-		fps.updateFPS();
-		try {
-			Thread.sleep(fps.getSleepmillis());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	private void shutdown() {
+		System.out.println("Stopping server");
 	}
 
 	private void init() {
 		System.out.println("Starting server");
 		clientaccepter.init();
-		
+
 		clientaccepter.run();
 	}
 
@@ -50,10 +33,28 @@ public class Main {
 
 	public void setRunning(boolean run) {
 		this.run = run;
+		if (run == false)
+			shutdown();
 	}
 
 	public void addClient(Client client) {
-		clients.add(client);
+		for (int i = 0; true; i += 1) {
+			if (!clients.containsValue(i)) {
+				clients.put(client, i);
+				client.id = i;
+				break;
+			}
+		}
+
+		for (Client currentClient : clients.keySet()) {
+			if (currentClient != client) {
+				currentClient.out.println("3|" + client.id);
+			}
+		}
+	}
+
+	public void removeClient(Client client) {
+		clients.remove(client);
 	}
 
 }

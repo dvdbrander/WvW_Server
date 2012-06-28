@@ -24,14 +24,21 @@ public class ClientAccepter implements Runnable{
 
 	@Override
 	public void run() {
+		FPS fps = new FPS();
 		while (main.isRunning()){
 			try {
 				Socket clientsocket = server.accept();
 				Client client = new Client(clientsocket,main);
-				client.init();
-				((Thread)client).start();
 				main.addClient(client);
+				client.init(main.clients.get(client));
+				((Thread)client).start();
 			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			fps.updateFPS();
+			try {
+				Thread.sleep(fps.getSleepmillis());
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
